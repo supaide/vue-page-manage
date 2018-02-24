@@ -1,0 +1,51 @@
+{
+  "name": "vue-page-manage",
+  "version": "1.0.0",
+  "description": "Page manage for vue; support normal|singleTop|singleTask mode for page history stack",
+  "main": "./src/index.js",
+  "scripts": {
+    "build": "node build/build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:supaide/vue-page-manage.git"
+  },
+  "files": [
+    "src",
+    "dist/*.js",
+    "build/create-router.js"
+  ],
+  "keywords": [
+    "vue",
+    "page stack"
+  ],
+  "author": "cyij2006@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/supaide/vue-page-manage/issues"
+  },
+  "homepage": "https://github.com/supaide/vue-page-manage/README.md",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "vue": "2.5.13",
+    "vue-loader": "^14.1.0",
+    "vue-style-loader": "4.0.1",
+    "vue-template-compiler": "^2.5.13",
+    "url-loader": "^0.6.2",
+    "file-loader": "^1.1.5",
+    "css-loader": "^0.28.7",
+    "less": "^2.3.1",
+    "less-loader": "^4.0.5",
+    "js-yaml": "^3.10.0",
+    "webpack": "3.11.0"
+  },
+  "dependencies": {
+    "fast-deep-equal": "^1.0.0",
+    "h5-webutil": "^1.0.0"
+  }
+}
