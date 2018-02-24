@@ -11,7 +11,7 @@
 </template>
 <script>
 import RouterView from './router-view' 
-import {util, url} from '7k-webutil'
+import {util, url} from 'h5-webutil'
 import equal from 'fast-deep-equal'
 
 let checkSSR = function () {

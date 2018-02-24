@@ -1,5 +1,5 @@
 import install from './install'
-import {event, url} from '7k-webutil'
+import {event, url} from 'h5-webutil'
 import equal from 'fast-deep-equal'
 
 let DEFAULT_OPTIONS = {
