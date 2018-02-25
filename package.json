@@ -1,6 +1,6 @@
 {
   "name": "vue-page-manage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Page manage for vue; support normal|singleTop|singleTask mode for page history stack",
   "main": "./src/index.js",
   "scripts": {
