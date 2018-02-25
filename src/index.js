@@ -89,30 +89,28 @@ VueRoute.prototype.init = function (app) {
     this.rid = this.history[this.history.length-1][0].split('_')[0] - 0
   }
 
-  if (typeof window !== 'undefined') {
-    this.__browserHistoryLen = window.history.length
-    window.addEventListener("popstate", function(e) { 
-      var currentBrowserHistoryLen = window.history.length
-      if (!that.__finished && currentBrowserHistoryLen - that.__browserHistoryLen < 3) {
-        console.log('push state '+that.__finished)
-        window.history.pushState({_t: +new Date()}, '')
-      }
-      event.emit('navbarback_sys')
-    })
-    window.history.pushState({_t: +new Date()}, '')
-    if (!this.startUrl) {
-      if (this.routeMode == 'html5') {
-        this.startUrl = window.location.pathname + window.location.search
-      } else {
-        this.startUrl = window.location.hash.slice(1)
-      }
-      let queryInfo = url.decodeQuery(this.startUrl)
-      path = queryInfo[0].join('/')
-      params = queryInfo[1]
+  this.__browserHistoryLen = window.history.length
+  window.addEventListener("popstate", function(e) { 
+    var currentBrowserHistoryLen = window.history.length
+    if (!that.__finished && currentBrowserHistoryLen - that.__browserHistoryLen < 3) {
+      console.log('push state '+that.__finished)
+      window.history.pushState({_t: +new Date()}, '')
     }
-    window.onunload = window.onbeforeunload = () => {
-      backupHistory.call(this)
+    event.emit('navbarback_sys')
+  })
+  window.history.pushState({_t: +new Date()}, '')
+  if (!this.startUrl) {
+    if (this.routeMode == 'html5') {
+      this.startUrl = window.location.pathname + window.location.search
+    } else {
+      this.startUrl = window.location.hash.slice(1)
     }
+  }
+  let queryInfo = url.decodeQuery(this.startUrl)
+  path = queryInfo[0].join('/')
+  params = queryInfo[1]
+  window.onunload = window.onbeforeunload = () => {
+    backupHistory.call(this)
   }
   let onBack = function (type) {
     that.finish(type)
@@ -392,9 +390,6 @@ VueRoute.prototype.finish = function (type, historyId) {
 }
 
 const defaultExit = function () {
-  if (typeof window === 'undefined') {
-    return
-  }
   var currentBrowserHistoryLen = window.history.length
   for (let i=0; i<=currentBrowserHistoryLen-this.__browserHistoryLen+1; i++) {
     window.history.back()
@@ -532,7 +527,7 @@ const replaceState = function (path, params) {
   if (query) {
     path += '?' + query
   }
-  if (path && typeof window !== 'undefined') {
+  if (path) {
     let startChar = this.routeMode == 'html5' ? '/' : '#'
     if (path.indexOf(startChar) !== 0) {
       path = startChar + path
