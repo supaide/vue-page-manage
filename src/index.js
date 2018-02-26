@@ -22,17 +22,10 @@ const VueRoute = function (routers, options) {
   this.routers = routers || []
   this.setOptions(DEFAULT_OPTIONS)
   this.setOptions(options)
-  this.history = []
   this.pathToRouterIndex = {}
-  this.bundles = {}
-  this.finishedHistoryIds = []
-  this.onPageChange = false
   this.rid = 0
   this.startUrl = null
-  this.__pageViews = []
-  this.__browserHistoryLen = 0
-  this.__finished = false
-  this.__started = false
+  initWithLocalStorage.call(this, true)
 }
 
 VueRoute.prototype.setOptions = function (options) {
@@ -44,41 +37,61 @@ VueRoute.prototype.setOptions = function (options) {
   }
 }
 
+let initWithLocalStorage = function (reset) {
+  if (reset) {
+    this.history = []
+    this.bundles = {}
+    this.finishedHistoryIds = []
+    this.onPageChange = false
+    this.__pageViews = []
+    this.__browserHistoryLen = 0
+    this.__finished = false
+    this.__started = false
+    this.preRoute = null
+    this.currentRoute = null
+  }
+  if (typeof localStorage === 'undefined') {
+    return
+  }
+  try {
+    let h_t = localStorage.getItem('_h_t')
+    let ts = +new Date
+    if (!reset && h_t && ts - h_t < 5000) {
+      let h_h = localStorage.getItem('_h_h')
+      let h_b = localStorage.getItem('_h_b')
+      let h_f = localStorage.getItem('_h_f')
+      if (h_h) {
+        this.history = JSON.parse(h_h)
+      }
+      if (h_b) {
+        this.bundles = JSON.parse(h_b)
+      }
+      if (h_f) {
+        this.finishedHistoryIds = JSON.parse(h_f)
+      }
+    }
+  } catch (e) {
+    console.log(e)
+  }
+  localStorage.removeItem('_h_t')
+  localStorage.removeItem('_h_h')
+  localStorage.removeItem('_h_b')
+  localStorage.removeItem('_h_f')
+}
+
+VueRoute.prototype.restart = function (startUrl) {
+  initWithLocalStorage.call(this, true)
+  this.setStartUrl(startUrl)
+}
+
 VueRoute.prototype.init = function (app) {
   if (this.app) {
     return
   }
 
-  if (typeof localStorage !== 'undefined') {
-    try {
-      let h_t = localStorage.getItem('_h_t')
-      let ts = +new Date
-      if (h_t && ts - h_t < 5000 ) {
-        let h_h = localStorage.getItem('_h_h')
-        let h_b = localStorage.getItem('_h_b')
-        let h_f = localStorage.getItem('_h_f')
-        if (h_h) {
-          this.history = JSON.parse(h_h)
-        }
-        if (h_b) {
-          this.bundles = JSON.parse(h_b)
-        }
-        if (h_f) {
-          this.finishedHistoryIds = JSON.parse(h_f)
-        }
-      }
-      localStorage.removeItem('_h_t')
-      localStorage.removeItem('_h_h')
-      localStorage.removeItem('_h_b')
-      localStorage.removeItem('_h_f')
-    } catch (e) {
-      console.log(e)
-    }
-  }
+  initWithLocalStorage.call(this)
 
   this.app = app
-  this.preRoute = null
-  this.currentRoute = null
   let that = this
   let path = null
   let params = null
@@ -479,16 +492,6 @@ const resetHistory = function (path, params) {
   }
 }
 
-/*
-const getFullPath = function (route) {
-  let paths = []
-  route.map(function (r) {
-    paths.push(r[1].path)
-  })
-  return paths.join('/')
-}
-*/
-
 const getChangeDirection = function (changedPageViewIndex) {
   if (!this.preRoute || this.preRoute.length < 1) {
     return null
@@ -517,7 +520,6 @@ const getChangeDirection = function (changedPageViewIndex) {
 }
 
 const replaceState = function (path, params) {
-  //let path = getFullPath(this.currentRoute)
   if (!path && this.history.length > 0) {
     let lastHistory = this.history.slice(-1)[0]
     path = lastHistory[1]
