@@ -132,6 +132,9 @@ export default {
         if (node.$data.__pageStatus === lifecycle) {
           continue
         }
+        if (node.$options.title && typeof document !== 'undefined') {
+          document.title = node.$options.title
+        }
         node.$set(node.$data, '__pageStatus', lifecycle)
         if (node.$options[lifecycle]) {
           try {

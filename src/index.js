@@ -469,7 +469,7 @@ const resetHistory = function (path, params) {
   let existInHistory = -1
   if (this.launcherMode != 'normal' && this.history.length > 0) {
     for (let i=this.history.length-1; i>=0; i--) {
-      if (path == this.history[i] && (!this.compareParam || (this.compareParam && (!params && !this.history[i][2] || equal(params, this.history[i][2]))))) {
+      if (path == this.history[i][1] && (!this.compareParam || (this.compareParam && (!params && !this.history[i][2] || equal(params, this.history[i][2]))))) {
         existInHistory = i
         break
       }
