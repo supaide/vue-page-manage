@@ -485,6 +485,8 @@ const resetHistory = function (path, params) {
   } else {
     this.finishedHistoryIds.push('_')
     this.history = this.history.slice(0, existInHistory + 1)
+    let currentEndRoute = this.currentRoute.slice(-1)[0]
+    this.history.slice(-1)[0].push({reuse: currentEndRoute && currentEndRoute[1].meta && currentEndRoute[1].meta.reuse})
   }
   if (this.history.length > this.maxHistorySize) {
     this.finishedHistoryIds.push('_')

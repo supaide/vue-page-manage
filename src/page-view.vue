@@ -101,11 +101,14 @@ export default {
 
         if (this.historyId) {
           let bundleId = this.historyId + '_' + node.__path
-          let currentData = this.$router.bundle(bundleId)
-          if (currentData) {
-            Object.keys(currentData).forEach((key) => {
-              node.$set(node.$data, key, currentData[key])
-            })
+          let currentEndRoute = this.$router.currentRoute.slice(-1)[0]
+          if (currentEndRoute && currentEndRoute[1].meta && currentEndRoute[1].meta.reuse) {
+            let currentData = this.$router.bundle(bundleId)
+            if (currentData) {
+              Object.keys(currentData).forEach((key) => {
+                node.$set(node.$data, key, currentData[key])
+              })
+            }
           }
           this.$router.bundle(bundleId, originData)
           node.$set(node.$data, '__historyId', this.historyId)
