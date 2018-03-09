@@ -54,7 +54,11 @@ export default {
     this.prePages = []
     this.currentPages = []
     this.$router.__pageViews.push(this)
-    this.historyId = null
+    let currentHistoryId = -1
+    if (this.$router.history.length > 0) {
+      currentHistoryId = this.$router.history.slice(-1)[0][0]
+    }
+    this.historyId = currentHistoryId
   },
   destroyed () {
     let pageViews = []

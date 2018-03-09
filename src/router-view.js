@@ -10,20 +10,25 @@ export default {
     }
     const pageView = parent
 
-    let depth = 0
+    if (!router.changedPageViewIndex) {
+      router.changedPageViewIndex = 0
+    }
+    let matched = null
+    if (router.changedPageViewIndex < router.currentRoute.length) {
+      matched = router.currentRoute[router.changedPageViewIndex][1]
+    }
     let fullPath = []
-    for (let i=0; i<router.__pageViews.length; i++) {
-      fullPath.push(router.currentRoute[i][1].path)
-      if (router.__pageViews[i]._uid == parent._uid) {
-        depth = i
+    for (let i=0; i<router.currentRoute.length; i++) {
+      if (i>router.changedPageViewIndex) {
         break
       }
+      fullPath.push(router.currentRoute[i][1].path)
     }
+    router.changedPageViewIndex++
 
-    const matched = router.currentRoute[depth][1]
     parent._routerViewCache || (parent._routerViewCache = {})
     // change 更新时，route view被触发多次更新（原因未确定），因此复用之前的实例
-    if (parent._routerViewCache[matched.path]) {
+    if (matched && parent._routerViewCache[matched.path]) {
       return parent._routerViewCache[matched.path]
     }
     if (!matched || !matched.ctor) {

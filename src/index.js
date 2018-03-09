@@ -562,6 +562,7 @@ const doPageChange = function (path, params, forward) {
   replaceState.call(this, path, params)
   let changedPageViewIndex = routeChangeAt(this.currentRoute, this.preRoute)
   if (this.__pageViews.length > changedPageViewIndex) {
+    this.changedPageViewIndex = changedPageViewIndex
     this.__pageViews[changedPageViewIndex].doPageChange(this.history[this.history.length - 1][0], getChangeDirection.call(this, changedPageViewIndex))
   }
   doReady.call(this)
