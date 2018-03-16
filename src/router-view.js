@@ -32,7 +32,9 @@ export default {
       return parent._routerViewCache[matched.path]
     }
     if (!matched || !matched.ctor) {
-      delete parent._routerViewCache[matched.path]
+      if (matched && matched.path) {
+        delete parent._routerViewCache[matched.path]
+      }
       return h()
     }
     data.props = {
