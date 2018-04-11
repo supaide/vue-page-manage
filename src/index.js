@@ -117,6 +117,9 @@ VueRoute.prototype.init = function (app) {
       this.startUrl = window.location.pathname + window.location.search
     } else {
       this.startUrl = window.location.hash.slice(1)
+      if (!this.startUrl) {
+        this.startUrl = '/'
+      }
     }
   }
   let queryInfo = url.decodeQuery(this.startUrl)
