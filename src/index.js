@@ -189,7 +189,6 @@ VueRoute.prototype.push = function (location) {
 }
 
 VueRoute.prototype.goto = function (path, params, backward) {
-  debugger
   this.__finished = false
   if (this.onPageChange || this.routers.length < 1) {
     return
