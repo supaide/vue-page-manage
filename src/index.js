@@ -189,6 +189,7 @@ VueRoute.prototype.push = function (location) {
 }
 
 VueRoute.prototype.goto = function (path, params, backward) {
+  debugger
   this.__finished = false
   if (this.onPageChange || this.routers.length < 1) {
     return
@@ -284,7 +285,8 @@ const getMatchedRouters = function (path, withRouter) {
     while(true) {
       let matchedIndex = -1
       for (let i=0; i<routers.length; i++) {
-        if (0 !== path.indexOf(routers[i].path)) {
+        let _path = path + '/'
+        if (0 !== _path.indexOf(routers[i].path+'/')) {
           continue
         }
         matchedIndex = i
