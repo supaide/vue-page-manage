@@ -351,7 +351,7 @@ const confirmToExist = function () {
   if (matchedRouters.length < 1) {
     return false
   }
-  if (currentPath != this.routers[0].path) {
+  if (currentPath != this.routers[0].path && currentPath != this.routers[0].alias) {
     this.finishedHistoryIds.push('_')
     this.history = []
     this.goto(this.routers[0].path)

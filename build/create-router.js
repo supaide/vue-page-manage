@@ -11,7 +11,7 @@ const fileTypes = ['.js', '.vue']
 const components = {}
 const topPaths = {}
 
-const unusedKeys = ['_index', 'alias']
+const unusedKeys = ['_index']
 const delUnusedKey = function (configs) {
   configs.forEach(function (config) {
     unusedKeys.forEach(function (key) {
