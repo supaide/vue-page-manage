@@ -285,7 +285,7 @@ const getMatchedRouters = function (path, withRouter) {
       let matchedIndex = -1
       for (let i=0; i<routers.length; i++) {
         let _path = path + '/'
-        if (0 !== _path.indexOf(routers[i].path+'/')) {
+        if (0 !== _path.indexOf(routers[i].path+'/') || (routers[i].path+'/' != _path && routers[i].redirect)) {
           continue
         }
         matchedIndex = i

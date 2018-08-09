@@ -10,6 +10,7 @@ let pagePath = ''
 const fileTypes = ['.js', '.vue']
 const components = {}
 const topPaths = {}
+const allDirs = []
 
 const unusedKeys = ['_index']
 const delUnusedKey = function (configs) {
@@ -60,7 +61,7 @@ const readConfig = function (path0) {
 
 const resort = function (names, sort) {
   if (!sort) {
-    return names
+    return names.sort();
   }
   let names1 = []
   sort.map(function (name) {
@@ -90,6 +91,7 @@ const parser = function (path0, configs) {
     let currentFile = path.join(path0, file)
     if (fs.lstatSync(currentFile).isDirectory()) {
       dirs.push(file.toLowerCase())
+      allDirs.push(path0 + '/' + file.toLowerCase())
     } else {
       fileTypes.map(function (type) {
         if (file.slice(0-type.length).toLowerCase() === type.toLowerCase()) {
@@ -102,9 +104,10 @@ const parser = function (path0, configs) {
     }
   })
   let fileSort 
-  if (yamlConfig.__sort) {
+  if (yamlConfig && yamlConfig.__sort) {
     fileSort = []
     yamlConfig.__sort.map(function (k) {
+      k = k + ''
       fileSort.push(k.toLowerCase())
     })
   }
@@ -222,6 +225,23 @@ module.exports = function (options) {
   } else {
     pageConfigs = newPageConfigs
   }
+  var pageConfigsForDir = []
+  var dirUsed = {}
+  allDirs.forEach (function (dir) {
+    dir = dir.replace(pagePath+'/', '')
+    pageConfigs.forEach (function (node) {
+      if (node.path != dir && !dirUsed[dir]) {
+        var pos = node.path.indexOf(dir)
+        if (pos >= 0 && node.path.substr(pos+dir.length+1).indexOf('/') < 0) {
+          dirUsed[dir] = 1;
+          pageConfigsForDir.push({path: dir, redirect: node.path});
+          return false;
+        }
+      }
+    })
+  })
+  pageConfigs = pageConfigs.concat(pageConfigsForDir)
+    console.log(pageConfigs)
 
   let configs = components0.join("\n")
   configs += "\n\nexport default " + JSON.stringify(pageConfigs).
