@@ -241,7 +241,6 @@ module.exports = function (options) {
     })
   })
   pageConfigs = pageConfigs.concat(pageConfigsForDir)
-    console.log(pageConfigs)
 
   let configs = components0.join("\n")
   configs += "\n\nexport default " + JSON.stringify(pageConfigs).
